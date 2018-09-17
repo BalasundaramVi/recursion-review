@@ -8,8 +8,8 @@ var stringifyJSON = function(obj) {
     return ('null');
   }
 
-  if (obj === undefined) {
-    return ('undefined');
+  if (typeof obj === 'undefined') {
+    return;
   }
   
   if (typeof obj === 'number') {
@@ -17,7 +17,7 @@ var stringifyJSON = function(obj) {
   }
 
   if (typeof obj === 'string') {
-    return obj;
+    return ('"' + obj + '"');
   }
 
   if (typeof obj === 'boolean') {
@@ -28,18 +28,38 @@ var stringifyJSON = function(obj) {
     }
   }
   
+  if (typeof obj === 'function') {
+    return;
+  }
+  
   if (Array.isArray(obj)) {
     var outputObj = '[';
     for (var i = 0; i < obj.length; i++) {
-      outputObj += stringifyJSON(obj[i]) + ', ';
+      outputObj += stringifyJSON(obj[i]) + ',';
     }
-    outputObj.splice(0, outputObj.length-2);
+    if (outputObj.length !== 1) {
+      outputObj = outputObj.slice(0, outputObj.length-1);
+    }
+    
     outputObj += ']';
     return outputObj;
   }
 
   if (typeof obj === 'object') {
-  
+    var outputObj = '{';
+    for (var key in obj) {
+      if (typeof obj[key] === 'function' || typeof obj[key] === 'undefined') {
+        continue;
+      }
+      outputObj += stringifyJSON(key) + ':' + stringifyJSON(obj[key]) + ',';
+    }
+
+    if (outputObj.length !== 1) {
+      outputObj = outputObj.slice(0, outputObj.length-1);
+    }
+    
+    outputObj += '}';
+    return outputObj;
   }
 
 };
