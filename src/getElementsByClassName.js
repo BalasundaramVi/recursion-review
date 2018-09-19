@@ -8,10 +8,6 @@ var getElementsByClassName = function(className, node) {
   if (node === undefined) {
     node = document.body;
   }
-  
-  // if (node === null) {
-  //   return;
-  // }
 
   if (node.classList === undefined) {
     return;
